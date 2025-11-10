@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Unicode Markdown Decoder</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background: #f5f5f5;
+  }
+  h2 {
+    color: #333;
+  }
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    font-family: monospace;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #4CAF50;
+    color: white;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #45a049;
+  }
+  #preview {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<h2>Unicode Decoder with Markdown</h2>
+
+<textarea id="input" rows="10" placeholder="Paste text with Unicode here..."></textarea><br>
+<button onclick="decode()">Decode Unicode</button>
+<button onclick="copyOutput()">Copy decoded to clipboard</button>
+
+<h3>Decoded Text:</h3>
+<textarea id="output" rows="10" readonly></textarea>
+
+<h3>Markdown Preview:</h3>
+<div id="preview"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+function decode() {
+  let text = document.getElementById("input").value;
+  text = text.replace(/\\u([0-9a-fA-F]{4})/g, (_, code) => String.fromCharCode(parseInt(code, 16)));
+  text = text.replace(/\\u\{([0-9a-fA-F]+)\}/g, (_, code) => String.fromCodePoint(parseInt(code, 16)));
+  text = text.replace(/\\U([0-9a-fA-F]{8})/g, (_, code) => String.fromCodePoint(parseInt(code, 16)));
+  text = text.replace(/\\n/g, "\n");
+  document.getElementById("output").value = text;
+  document.getElementById("preview").innerHTML = marked.parse(text);
+}
+
+function copyOutput() {
+  const output = document.getElementById("output");
+  output.select();
+  output.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  alert("Decoded text copied to clipboard!");
+}
+</script>
+
+</body>
+</html>
