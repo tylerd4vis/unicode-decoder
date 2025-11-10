@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Unicode Markdown Decoder</title>
+<title>Unicode Decoder</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -11,52 +11,48 @@
   }
   h2 {
     color: #333;
+    text-align: center;
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
   }
   textarea {
-    width: 100%;
+    width: 45%;
+    height: 300px;
     box-sizing: border-box;
     padding: 10px;
     font-family: monospace;
-    margin-bottom: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    resize: vertical;
   }
   button {
-    padding: 10px 15px;
-    margin-right: 10px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     background: #4CAF50;
     color: white;
     cursor: pointer;
+    height: 40px;
   }
   button:hover {
     background: #45a049;
-  }
-  #preview {
-    background: white;
-    padding: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    white-space: pre-wrap;
   }
 </style>
 </head>
 <body>
 
-<h2>Unicode Decoder with Markdown</h2>
+<h2>Unicode Decoder</h2>
 
-<textarea id="input" rows="10" placeholder="Paste text with Unicode here..."></textarea><br>
-<button onclick="decode()">Decode Unicode</button>
-<button onclick="copyOutput()">Copy decoded to clipboard</button>
-
-<h3>Decoded Text:</h3>
-<textarea id="output" rows="10" readonly></textarea>
-
-<h3>Markdown Preview:</h3>
-<div id="preview"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<div class="container">
+  <textarea id="input" placeholder="Paste text with Unicode here..."></textarea>
+  <button onclick="decode()">→ Decode →</button>
+  <textarea id="output" readonly placeholder="Decoded text will appear here..."></textarea>
+</div>
 
 <script>
 function decode() {
@@ -66,15 +62,6 @@ function decode() {
   text = text.replace(/\\U([0-9a-fA-F]{8})/g, (_, code) => String.fromCodePoint(parseInt(code, 16)));
   text = text.replace(/\\n/g, "\n");
   document.getElementById("output").value = text;
-  document.getElementById("preview").innerHTML = marked.parse(text);
-}
-
-function copyOutput() {
-  const output = document.getElementById("output");
-  output.select();
-  output.setSelectionRange(0, 99999);
-  document.execCommand("copy");
-  alert("Decoded text copied to clipboard!");
 }
 </script>
 
